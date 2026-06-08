@@ -1,0 +1,40 @@
+{
+  "name": "kaizen-mrca",
+  "version": "v1",
+  "fecha": "2026-06-08",
+  "git_sha": "n/a (repo aún no inicializado)",
+  "data_csv": "09_FE_SAP_v2.2.csv",
+  "data_sha256": "1359e004636791b8750ec175214b3919225c595c2ca4cd9a8c431762eae4415f",
+  "manifest_sha256": "4bdf75224e6f633ad988caa094b749542d40f14a0656cc403a2eb2328d901028",
+  "python": "3.9.6",
+  "sklearn": "1.6.1",
+  "numpy": "2.0.2",
+  "pandas": "2.3.3",
+  "random_state": 42,
+  "alpha": 0.3,
+  "l1_ratio": 0.8,
+  "nested_best_params": {
+    "reg__alpha": 0.3,
+    "reg__l1_ratio": 0.8
+  },
+  "fixed_equals_nested_winner": true,
+  "n_dev_2023": 631,
+  "n_val_2024": 146,
+  "metrics_dev_oof": {
+    "auc_roc": 0.802,
+    "sens": 0.92,
+    "spec": 0.407,
+    "npv": 0.827,
+    "ppv": 0.624
+  },
+  "metrics_val_temporal": {
+    "auc_roc": 0.626,
+    "sens": 0.811,
+    "spec": 0.28,
+    "npv": 0.722,
+    "ppv": 0.391
+  },
+  "umbral_congelado": 0.2157,
+  "outcome": "ACE-III < corte por educación (Bruno): <85 si ≥12 años; <68 si <12",
+  "uso_no_previsto": "NO diagnóstico. Cribado de primer nivel; requiere recalibración local."
+}

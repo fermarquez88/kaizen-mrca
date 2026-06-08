@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "Si usás este software, citá el trabajo de la siguiente manera."
+title: "Kaizen-MRCA: modelo de riesgo cognitivo autorreportable para triage a Unidad de Memoria"
+version: 1.0.0
+date-released: "2026-06-08"
+repository-code: "REEMPLAZAR_TRAS_PUBLICAR: https://github.com/<usuario>/kaizen-mrca"
+doi: "REEMPLAZAR_TRAS_ZENODO: 10.5281/zenodo.XXXXXXX"
+authors:
+  - family-names: "Márquez"
+    given-names: "Fernando"
+    email: "fmarquez.mum@gmail.com"
+    affiliation: "Servicio de Neurología, Hospital Dr. G. Rawson; Facultad de Ciencias Médicas, Universidad Católica de Cuyo — San Juan, Argentina"
+license: MIT
+keywords:
+  - salud cerebral
+  - cribado cognitivo
+  - determinantes sociales de la salud
+  - modelos predictivos
+  - equidad en salud
+  - TRIPOD+AI
+abstract: >
+  Modelo de cribado autorreportable que estima el ACE-III y señala el riesgo de
+  bajo desempeño cognitivo (corte ajustado por educación, Bruno) para priorizar la
+  derivación a una Unidad de Memoria pública en San Juan, Argentina. Desarrollo 2023
+  (n=631) y validación temporal externa 2024 (n=146). No diagnóstico; requiere
+  recalibración local.

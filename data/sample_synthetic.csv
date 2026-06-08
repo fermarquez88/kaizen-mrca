@@ -1,0 +1,9 @@
+edad,sexo,edu_anios,cqc_total,adlq_mean03,gds_total,chsc_fisica,chsc_nutri,chsc_social,chsc_sueno,chsc_mental,hipoacusia,deficit_visual,obesidad,diabetes,colesterol,fumador,vive_solo,sin_cloacas,sin_agua_red
+85,Mujer,2,49,0.7,3,1.4,1.3,3.2,0.95,2.8,0,0,0,0,0,0,0,1,0
+59,Hombre,10,53,2.1,12,3.4,3.1,2.0,0.49,3.9,1,0,0,1,0,1,1,1,0
+47,Hombre,5,26,0.2,4,3.5,2.9,3.6,0.99,3.1,0,0,1,0,0,0,1,1,0
+74,Hombre,7,25,0.9,10,1.8,3.8,2.9,1.03,1.5,0,0,1,1,1,0,1,0,0
+59,Mujer,12,27,0.6,3,3.7,2.7,3.2,0.56,2.5,1,0,1,0,0,1,1,1,0
+68,Mujer,6,34,1.2,12,1.1,1.3,2.9,1.25,2.3,0,1,1,1,1,0,0,1,0
+86,Hombre,5,20,1.0,7,1.0,3.2,3.2,1.47,3.3,0,1,0,0,1,0,0,1,0
+76,Mujer,5,25,2.1,12,1.9,1.2,3.6,1.44,1.3,1,0,0,0,1,0,1,1,0

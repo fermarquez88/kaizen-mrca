@@ -1,0 +1,14 @@
+# entornos y temporales
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.tmp
+
+# DATOS REALES — nunca versionar datos a nivel de participante
+02_datos/
+*.csv
+# excepción: muestra sintética del esquema (datos ficticios)
+!data/sample_synthetic.csv
+
+*.ipynb_checkpoints/

@@ -1,0 +1,12 @@
+# Kaizen-MRCA — versiones EXACTAS que reproducen los números del paper.
+# Los artefactos de scikit-learn son sensibles a la versión: cargar/entrenar con otra
+# versión puede mover los números más allá de la tolerancia del parity_test.py.
+# Entorno de referencia: Python 3.9.6 (idéntico al venv original del paquete S3).
+scikit-learn==1.6.1
+numpy==2.0.2
+scipy==1.13.1
+pandas==2.3.3
+joblib==1.5.3
+# --- solo para la app (UI); no afecta la paridad del modelo ---
+streamlit>=1.40
+matplotlib==3.9.4
