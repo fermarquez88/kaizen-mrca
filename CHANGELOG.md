@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/). Versionado semántico.
 
+## [1.0.1] — 2026-06-08
+Release archivado en **Zenodo** para obtener DOI citable. **Sin cambios** en el modelo,
+la ingeniería de variables ni el código respecto de v1.0.0 (paridad idéntica: AUC dev 0,802 /
+temporal 0,626 / umbral 0,216, sklearn 1.6.1).
+
 ## [1.0.0] — 2026-06-08
 Primer congelado reproducible del modelo (acompaña al manuscrito CAN 2026).
 
