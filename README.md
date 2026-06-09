@@ -1,5 +1,7 @@
 # Kaizen-MRCA — Modelo de Riesgo Cognitivo Autorreportable
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602277.svg)](https://doi.org/10.5281/zenodo.20602277) · Licencia: MIT
+
 Modelo de cribado **autorreportable** que estima el desempeño cognitivo global (ACE-III) y
 señala el **riesgo de bajo desempeño** para **priorizar la derivación** a una Unidad de Memoria
 pública (Hospital Dr. G. Rawson, San Juan, Argentina). Métrica norte: **valor predictivo
