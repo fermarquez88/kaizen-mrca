@@ -1,7 +1,7 @@
 # Model card: Kaizen-MRCA v1 (TRIPOD+AI)
 
 **Model:** self-report estimate of the risk of a low cognitive screening score, used to prioritize referral to a memory unit.
-**Artifact:** `model/kaizen_mrca_v1.joblib`. **Version:** v1. **Lead:** Fernando Márquez, MD (fmarquez.mum@gmail.com).
+**Artifact:** `model/kaizen_mrca_v1.joblib`. **Version:** v1. **Maintainer and contact:** Fernando Márquez, MD (fmarquez.mum@gmail.com).
 **Reference environment:** Python 3.9.6, scikit-learn 1.6.1, numpy 2.0.2, scipy 1.13.1, pandas 2.3.3, joblib 1.5.3, `random_state=42`.
 
 scikit-learn artifacts are version sensitive: loading or training with another version can break parity. Reproduce with `requirements.txt`; the gate is `src/parity_test.py`.
@@ -20,7 +20,7 @@ scikit-learn artifacts are version sensitive: loading or training with another v
 
 Only self-reported variables present in both waves (`09_FE_SAP_v2.2_manifest.json`, `model_features_wave_invariant`): age, age squared, sex, years of education, CQC total, ADLQ percentage, GDS total, CHSC physical, nutrition, social, sleep and mental subscales, cognitive reserve, reserve by age, cardiometabolic burden, obesity, hearing loss, smoking, living alone, sanitation deficit, visual deficit.
 
-Variables available only in 2023 (exposome, multimorbidity, housing, occupational complexity) are used only in the descriptive inequality analysis, never as predictors. An earlier deployment showed "unmet basic needs" in the contribution chart by mistake; that variable is not part of the model.
+Variables available only in 2023 (exposome, multimorbidity, housing, occupational complexity) are used only in the descriptive inequality analysis, never as predictors.
 
 ## 4. Architecture (frozen)
 

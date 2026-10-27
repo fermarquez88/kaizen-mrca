@@ -35,6 +35,6 @@
     "ppv": 0.391
   },
   "umbral_congelado": 0.2157,
-  "outcome": "ACE-III < corte por educación (Bruno): <85 si ≥12 años; <68 si <12",
+  "outcome": "ACE-III por debajo del corte ajustado por educación usado en la práctica: <85 si ≥12 años; <68 si <12",
   "uso_no_previsto": "NO diagnóstico. Cribado de primer nivel; requiere recalibración local."
 }

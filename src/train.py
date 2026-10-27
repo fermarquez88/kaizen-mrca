@@ -162,7 +162,7 @@ def main():
         "n_dev_2023": int(dev.sum()), "n_val_2024": int(val.sum()),
         "metrics_dev_oof": dev_m, "metrics_val_temporal": val_m,
         "umbral_congelado": round(thr, 4),
-        "outcome": "ACE-III < corte por educación (Bruno): <85 si ≥12 años; <68 si <12",
+        "outcome": "ACE-III por debajo del corte ajustado por educación usado en la práctica: <85 si ≥12 años; <68 si <12",
         "uso_no_previsto": "NO diagnóstico. Cribado de primer nivel; requiere recalibración local.",
     }
     artifact = {
