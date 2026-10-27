@@ -1,56 +1,60 @@
-# Model Card — Kaizen-MRCA v1 (TRIPOD+AI)
+# Model card: Kaizen-MRCA v1 (TRIPOD+AI)
 
-**Modelo:** estimación autorreportable del riesgo de bajo desempeño cognitivo para **priorizar la derivación** a una Unidad de Memoria.
-**Artefacto:** `model/kaizen_mrca_v1.joblib` · **Versión:** v1 · **Director:** Dr. Fernando Márquez (fmarquez.mum@gmail.com).
-**Entorno de referencia:** Python 3.9.6 · scikit-learn **1.6.1** · numpy 2.0.2 · scipy 1.13.1 · pandas 2.3.3 · joblib 1.5.3 · `random_state=42`.
+**Model:** self-report estimate of the risk of a low cognitive screening score, used to prioritize referral to a memory unit.
+**Artifact:** `model/kaizen_mrca_v1.joblib`. **Version:** v1. **Lead:** Fernando Márquez, MD (fmarquez.mum@gmail.com).
+**Reference environment:** Python 3.9.6, scikit-learn 1.6.1, numpy 2.0.2, scipy 1.13.1, pandas 2.3.3, joblib 1.5.3, `random_state=42`.
 
-> ⚠️ Los artefactos de scikit-learn son **sensibles a la versión**. Cargar/entrenar con otra versión puede romper la paridad. Reproducir con `requirements.txt`. El gate es `src/parity_test.py`.
+scikit-learn artifacts are version sensitive: loading or training with another version can break parity. Reproduce with `requirements.txt`; the gate is `src/parity_test.py`.
 
-## 1. Uso previsto y NO previsto
-- **Previsto:** cribado de **primer nivel**, autorreportado, para **priorizar/ordenar derivaciones** a la Unidad de Memoria y Salud Cerebral (Hospital Rawson, San Juan). Métrica norte: **VPN / sensibilidad** (valor de descarte).
-- **NO previsto:** **no es diagnóstico** de deterioro cognitivo ni demencia; no reemplaza la evaluación clínica; no debe usarse para autodiagnóstico ni para denegar atención. **Requiere recalibración local** antes de su uso en otra población.
+## 1. Intended and unintended use
 
-## 2. Población y desenlace
-- **Desarrollo:** programa Neuromentia, San Juan, 2023 (**n=631**). **Validación temporal externa:** ola 2024 (**n=146**). Adultos ≥40 años, autorreporte + ACE-III disponible.
-- **Desenlace:** ACE-III **por debajo del corte ajustado por educación** (Bruno): **<85** si ≥12 años de educación; **<68** si <12. Interpretado como **riesgo**, no diagnóstico.
+- **Intended:** first-level, self-reported screening to prioritize and order referrals to the Memory and Brain Health Unit, Hospital Dr. Guillermo Rawson, San Juan, Argentina. Guiding metric: negative predictive value and sensitivity (rule-out value).
+- **Not intended:** diagnosis of cognitive impairment or dementia; replacement of clinical assessment; self-diagnosis; denial of care. Local recalibration is required before use in any other population.
 
-## 3. Predictores (21, wave-invariant)
-Solo variables autorreportables presentes en ambas olas (`09_FE_SAP_v2.2_manifest.json` → `model_features_wave_invariant`):
-`edad, edad2, sexo, edu_anios, cqc_total, adlq_pct, gds_total, chsc_fisica, chsc_nutri, chsc_social, chsc_sueno, chsc_mental, reserva_cognitiva, res_x_edad, carga_cardiometabolica, obesidad, hipoacusia, fumador, vive_solo, saneamiento_deficit, deficit_visual`.
-Las variables 2023-only (exposoma, multimorbilidad, casa/piso, complejidad ocupacional) se usan **solo en el análisis descriptivo de desigualdad**, **NUNCA como predictores**. *(El despliegue anterior incluía por error "NBI/privación material" en el gráfico de contribuciones: esa variable NO es del modelo.)*
+## 2. Population and outcome
 
-## 4. Arquitectura (congelada)
-`ColumnTransformer(IterativeImputer + StandardScaler)` → `ElasticNet(α=0.3, l1_ratio=0.8)` sobre **ACE-III crudo** → `riesgo = corte(educación) − ACE_estimado` → `IsotonicRegression` → **umbral congelado 0.216** (sensibilidad ≥0.80, fuera de fold).
-- Hiperparámetros **fijos** confirmados como ganadores de la nested CV sobre 2023 (`best_params = {α:0.3, l1_ratio:0.8}`; coeficientes idénticos a `GridSearchCV.best_estimator_`).
-- Calibrador isotónico y umbral derivados del **OOF anidado de 2023** (procedimiento exacto del paper).
-- Preprocesamiento **dentro de fold** (sin leakage). Entrenado **solo en 2023** (no pooled).
+- **Development:** Neuromentia community screening program (led by Dr. Martín Bruno, Universidad Católica de Cuyo), San Juan, 2023 wave (n = 631). **Temporal validation:** 2024 wave (n = 146). Adults aged 40 or older with self-report data and an ACE-III score.
+- **Outcome:** ACE-III total score below the education-adjusted cut-off used in practice: below 85 with 12 or more years of education, below 68 with fewer than 12. Interpreted as risk, not diagnosis.
 
-## 5. Métricas honestas
-| Conjunto | AUC | VPN | Umbral | Nota |
+## 3. Predictors (21, available in both waves)
+
+Only self-reported variables present in both waves (`09_FE_SAP_v2.2_manifest.json`, `model_features_wave_invariant`): age, age squared, sex, years of education, CQC total, ADLQ percentage, GDS total, CHSC physical, nutrition, social, sleep and mental subscales, cognitive reserve, reserve by age, cardiometabolic burden, obesity, hearing loss, smoking, living alone, sanitation deficit, visual deficit.
+
+Variables available only in 2023 (exposome, multimorbidity, housing, occupational complexity) are used only in the descriptive inequality analysis, never as predictors. An earlier deployment showed "unmet basic needs" in the contribution chart by mistake; that variable is not part of the model.
+
+## 4. Architecture (frozen)
+
+`ColumnTransformer(IterativeImputer + StandardScaler)` then `ElasticNet(alpha = 0.3, l1_ratio = 0.8)` on the raw ACE-III score; risk = education cut-off minus estimated ACE-III; `IsotonicRegression`; frozen threshold 0.216 (sensitivity at least 0.80 out of fold).
+
+- Fixed hyperparameters confirmed as winners of nested cross-validation on 2023 (coefficients identical to `GridSearchCV.best_estimator_`).
+- Isotonic calibrator and threshold derived from the nested out-of-fold predictions of 2023.
+- Preprocessing within folds (no leakage). Trained on 2023 only, not pooled.
+
+## 5. Metrics
+
+| Set | AUC | NPV | Threshold | Note |
 |---|---|---|---|---|
-| **Desarrollo 2023 (OOF anidado)** | **0,802** | **0,827** | 0,216 | discriminación + descarte |
-| **Validación temporal 2024 (1 vez)** | **0,626** | 0,722 | 0,216 | cohorte más educada |
-| Validación 2024 **recalibrada** | 0,626 | — | — | calibración recuperable (slope→1) |
+| Development 2023 (nested out-of-fold) | 0.802 | 0.827 | 0.216 | discrimination and rule-out |
+| Temporal validation 2024 (single run) | 0.626 | 0.722 | 0.216 | more educated cohort |
+| Validation 2024, recalibrated | 0.626 | | | calibration recoverable (slope to 1) |
 
-La caída en 2024 se debe a un **cambio de composición poblacional** (cohorte más educada, mayor reserva), no a variables faltantes. **Recalibración local obligatoria.**
+The drop in 2024 reflects a change in population composition (a more educated cohort with higher reserve), not missing variables. Local recalibration is mandatory.
 
-## 6. Equidad
-Mejor desempeño en **baja escolaridad** (AUC ~0,80) que en alta; el menor VPN en alta escolaridad se declara como **limitación de equidad**. El corte ajustado por educación evita re-detectar solo a personas de menor escolaridad.
+## 6. Equity
 
-## 7. Limitaciones
-Diseño transversal; desenlace = corte de cribado, no diagnóstico clínico de referencia. Muestreo voluntario (sobrerrepresentación femenina). Autorreporte (riesgo de anosognosia). Validación 2024 pequeña (n=146). Sin seguimiento longitudinal.
+Discrimination was better among people with low educational attainment (AUC about 0.80) than among those with high educational attainment; the lower negative predictive value in the latter group is declared as an equity limitation. The education-adjusted cut-off avoids flagging only people with low educational attainment.
 
-## 8. Reproducibilidad y procedencia
-- **Datos de entrenamiento:** `02_datos/09_FE_SAP_v2.2.csv` (anonimizado; **no se publica**). SHA-256 y git SHA registrados en `model/training_report.json`.
-- **Ingeniería de variables para inferencia** (`src/fe_sap.py`): el script original de FE (crudo→features) corrió en el scratchpad de Cowork y no está versionado; `fe_sap.py` lo **reproduce y valida contra el CSV de entrenamiento** (`src/validate_fe.py`): **las 21 features quedan bit-exactas** (corr 1,0, max|diff| = 0,0 sobre las 774 filas emparejadas 1:1).
-  - Detalle de los composites (constantes **congeladas**, despejadas del CSV; ver `src/fe_sap.py`):
-    - `reserva_cognitiva` es una función **afín** exacta de (edu, chsc_mental, chsc_social):
-      `0.21112442623486138·edu + 1.3041487319636482·mental + 1.4871760498940194·social − 8.828883194872445`.
-      Constantes ajustadas por mínimos cuadrados sobre las **726 filas completas** → max|diff| = 9,8e-15.
-      (El z-scoring original es lineal, por eso un ajuste afín lo recupera exactamente; `chsc_mental` = media de los ítems CHSC 1,17,19,20,21 excluyendo código 9.)
-    - `res_x_edad` = `reserva · z(edad)` con `z(edad) = (edad − 62.706815) / 17.719660`; equivalente lineal congelado
-      `0.05643449222027676·(reserva·edad) − 3.5388272395751357·reserva` → max|diff| = 4,3e-15.
-  - **Criterio:** constantes embebidas (no recalculadas sobre datos nuevos). Esto NO afecta la paridad del modelo, que se entrena sobre el CSV exacto.
-- **Gate:** `python src/parity_test.py` reproduce AUC dev 0,802 / temporal 0,626 / umbral 0,216 (tolerancia ±0,02).
+## 7. Limitations
 
-**Fecha de congelado / git SHA / hashes:** ver `model/training_report.json`.
+Cross-sectional design; the outcome is a screening cut-off, not a clinical reference diagnosis. Voluntary sampling (women over-represented). Self-report (risk of anosognosia). Small 2024 validation (n = 146). No longitudinal follow-up.
+
+## 8. Reproducibility and provenance
+
+- **Training data:** `02_datos/09_FE_SAP_v2.2.csv` (de-identified, not published). SHA-256 and git SHA recorded in `model/training_report.json`.
+- **Inference feature engineering** (`src/fe_sap.py`): the original raw-to-features script was not versioned; `fe_sap.py` reproduces it and is validated against the training file (`src/validate_fe.py`): the 21 features match exactly (correlation 1.0, maximum absolute difference 0.0 over the 774 rows matched one to one).
+  - `reserva_cognitiva` is an exact affine function of (education, CHSC mental, CHSC social): 0.21112442623486138 x education + 1.3041487319636482 x mental + 1.4871760498940194 x social - 8.828883194872445, fitted by least squares on the 726 complete rows (maximum absolute difference 9.8e-15). `chsc_mental` is the mean of CHSC items 1, 17, 19, 20 and 21, excluding code 9.
+  - `res_x_edad` = reserve x z(age), with z(age) = (age - 62.706815) / 17.719660; frozen linear equivalent 0.05643449222027676 x (reserve x age) - 3.5388272395751357 x reserve (maximum absolute difference 4.3e-15).
+  - Constants are embedded, not recomputed on new data. This does not affect model parity, which is trained on the exact CSV.
+- **Gate:** `python src/parity_test.py` reproduces AUC 0.802 (development), 0.626 (temporal) and threshold 0.216 (tolerance 0.02).
+
+Freeze date, git SHA and hashes: see `model/training_report.json`.

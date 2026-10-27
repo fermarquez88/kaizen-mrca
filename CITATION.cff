@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-message: "Si usás este software, citá el trabajo de la siguiente manera."
-title: "Kaizen-MRCA: modelo de riesgo cognitivo autorreportable para triage a Unidad de Memoria"
+message: "If you use this software, please cite it as below."
+title: "Kaizen-MRCA: a self-report cognitive risk model to prioritize referral to a memory unit"
 version: 1.0.1
 date-released: "2026-06-08"
 repository-code: "https://github.com/fermarquez88/kaizen-mrca"
@@ -9,18 +9,18 @@ authors:
   - family-names: "Márquez"
     given-names: "Fernando"
     email: "fmarquez.mum@gmail.com"
-    affiliation: "Servicio de Neurología, Hospital Dr. G. Rawson; Facultad de Ciencias Médicas, Universidad Católica de Cuyo — San Juan, Argentina"
+    affiliation: "Neurology Service, Hospital Dr. Guillermo Rawson; Facultad de Ciencias Médicas, Universidad Católica de Cuyo, San Juan, Argentina"
 license: MIT
 keywords:
-  - salud cerebral
-  - cribado cognitivo
-  - determinantes sociales de la salud
-  - modelos predictivos
-  - equidad en salud
+  - brain health
+  - cognitive screening
+  - social determinants of health
+  - prediction models
+  - health equity
   - TRIPOD+AI
 abstract: >
-  Modelo de cribado autorreportable que estima el ACE-III y señala el riesgo de
-  bajo desempeño cognitivo (corte ajustado por educación, Bruno) para priorizar la
-  derivación a una Unidad de Memoria pública en San Juan, Argentina. Desarrollo 2023
-  (n=631) y validación temporal externa 2024 (n=146). No diagnóstico; requiere
-  recalibración local.
+  Self-report screening model that estimates the ACE-III total score and flags the risk of a low
+  score, using the education-adjusted cut-off applied in practice, to prioritize referral to a public
+  memory unit in San Juan, Argentina. Developed on the 2023 wave of the Neuromentia community
+  screening program (n = 631) and validated temporally on the 2024 wave (n = 146). Not diagnostic;
+  requires local recalibration.

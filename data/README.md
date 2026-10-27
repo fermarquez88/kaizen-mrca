@@ -1,35 +1,30 @@
-# Política de datos — Kaizen-MRCA
+# Data policy
 
-**No se publican datos a nivel de participante.** Por ética y por la regla del proyecto, este
-repositorio incluye **solo código + el artefacto del modelo**. No contiene la base de datos.
+No participant-level data are published in this repository, which contains only code and the frozen model artifact.
 
-## Disponibilidad
-Los datos (anonimizados) están disponibles **bajo solicitud razonable** al autor
-(**fmarquez.mum@gmail.com**) y aprobación del **Comité de Ética en Investigación de la
-Universidad Católica de Cuyo (protocolo 003/20)**.
+## Availability
 
-## Para reproducir localmente
-`src/train.py`, `src/parity_test.py` y `src/validate_fe.py` esperan, en una carpeta `02_datos/`:
-- `09_FE_SAP_v2.2.csv` + `09_FE_SAP_v2.2_manifest.json` (matriz de features pre-especificada).
-- `06_neuromentia_mixta_anon_v1.0.csv` (crudo anonimizado; solo para ajustar/validar la FE de inferencia).
+The de-identified dataset belongs to Neuromentia, the community dementia screening program led by Dr. Martín Bruno (Universidad Católica de Cuyo, San Juan, Argentina). Requests for access can be sent to the author (fmarquez.mum@gmail.com) and are forwarded to the program, which decides according to its own institutional and ethical procedures.
 
-Indicá la ruta con la variable de entorno `KAIZEN_DATA=/ruta/a/02_datos`.
+## Reproducing locally
 
-## Muestra sintética (`sample_synthetic.csv`)
-`data/sample_synthetic.csv` contiene **8 filas FICTICIAS** (generadas con `random_state=42`, **no**
-corresponden a ninguna persona real) con el esquema de entrada de `inference.predict()`. Sirve para
-probar la inferencia sin datos reales:
+`src/train.py`, `src/parity_test.py` and `src/validate_fe.py` expect, in a folder pointed to by the environment variable `KAIZEN_DATA`:
+
+- `09_FE_SAP_v2.2.csv` and `09_FE_SAP_v2.2_manifest.json`, the pre-specified feature matrix;
+- `06_neuromentia_mixta_anon_v1.0.csv`, the de-identified raw file, used only to fit and validate the inference feature engineering.
+
+## Synthetic sample (`sample_synthetic.csv`)
+
+`data/sample_synthetic.csv` contains eight fictitious rows generated with `random_state=42`. They do not correspond to any real person and only illustrate the input schema of `inference.predict()`:
+
 ```python
 import sys; sys.path.insert(0, "src"); import inference, csv
+flags = {"hipoacusia","deficit_visual","obesidad","diabetes","colesterol","fumador","vive_solo","sin_cloacas","sin_agua_red"}
 for row in csv.DictReader(open("data/sample_synthetic.csv")):
-    inp = {k: (v not in ("0", "")) if k in {"hipoacusia","deficit_visual","obesidad","diabetes",
-            "colesterol","fumador","vive_solo","sin_cloacas","sin_agua_red"} else float(v) if k!="sexo" else v
-           for k, v in row.items()}
-    print(inference.predict(inp)["ace_estimado"], inference.predict(inp)["decision"])
+    inp = {k: (v not in ("0", "")) if k in flags else (float(v) if k != "sexo" else v) for k, v in row.items()}
+    r = inference.predict(inp); print(r["ace_estimado"], r["decision"])
 ```
 
-## Lo que SÍ viaja en el artefacto
-El artefacto (`model/kaizen_mrca_v1.joblib`) contiene **parámetros agregados**
-(coeficientes del modelo, medias/desvíos de estandarización, mapa isotónico, umbral) y
-**ningún registro individual**. El hash SHA-256 del CSV de entrenamiento queda registrado en
-`model/training_report.json` para trazabilidad, sin exponer los datos.
+## What the artifact contains
+
+`model/kaizen_mrca_v1.joblib` holds aggregated parameters only: model coefficients, standardization means and deviations, the isotonic calibration map and the decision threshold. No individual record is stored. The SHA-256 hash of the training file is recorded in `model/training_report.json` for traceability without exposing the data.

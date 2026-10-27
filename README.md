@@ -1,56 +1,56 @@
-# Kaizen-MRCA — Modelo de Riesgo Cognitivo Autorreportable
+# Kaizen-MRCA: a self-report model to prioritize referral to a public memory unit
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602277.svg)](https://doi.org/10.5281/zenodo.20602277) · Licencia: MIT
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20602277.svg)](https://doi.org/10.5281/zenodo.20602277) License: MIT
 
-Modelo de cribado **autorreportable** que estima el desempeño cognitivo global (ACE-III) y
-señala el **riesgo de bajo desempeño** para **priorizar la derivación** a una Unidad de Memoria
-pública (Hospital Dr. G. Rawson, San Juan, Argentina). Métrica norte: **valor predictivo
-negativo (VPN)** / sensibilidad. **No es una herramienta diagnóstica.**
+Kaizen-MRCA (Modelo de Riesgo Cognitivo Autorreportable) is a first-level screening model that estimates global cognitive performance (ACE-III total score) from self-reported information and flags the risk of a low score, so that a public memory unit can prioritize referrals. Its guiding metric is the negative predictive value, that is, its ability to rule out. It is not a diagnostic tool.
 
-> Acompaña al manuscrito (Congreso Argentino de Neurología 2026). Reporte **TRIPOD+AI**.
+Developed for the Memory and Brain Health Unit, Hospital Dr. Guillermo Rawson, San Juan, Argentina, with data from Neuromentia, the community dementia screening program led by Dr. Martín Bruno (Universidad Católica de Cuyo). Presented as a poster at the 16th Argentine Congress of Neuropsychology (SONEPSA, 2025; honorable mention, professionals category). Reported following TRIPOD+AI.
 
-## Qué hay acá
+## Contents
+
 ```
 kaizen-mrca/
-├── src/
-│   ├── fe_sap.py        # ingeniería de variables (autorreporte → 21 features)
-│   ├── train.py         # entrena en 2023 y CONGELA el artefacto único
-│   ├── inference.py     # predict(raw_inputs) — ÚNICA función de inferencia
-│   ├── parity_test.py   # GATE: reproduce los números del paper
-│   └── validate_fe.py   # valida la FE contra el CSV de entrenamiento
-├── model/
-│   ├── kaizen_mrca_v1.joblib   # artefacto congelado (pipeline+isotónica+umbral+FE params+metadatos)
-│   ├── model_card.md                # TRIPOD+AI
-│   └── training_report.json         # versión, fecha, git SHA, hash de datos, métricas
-├── app/streamlit_app.py # UI; importa SOLO inference.predict()
-├── data/README.md       # política de datos (NO se publican datos individuales)
-├── requirements.txt     # versiones EXACTAS (pinned)
-├── LICENSE              # MIT
-└── CITATION.cff
+  src/
+    fe_sap.py          feature engineering (self-report to 21 features)
+    train.py           trains on the 2023 wave and freezes the single artifact
+    inference.py       predict(raw_inputs): the only inference entry point
+    parity_test.py     gate that reproduces the reported metrics
+    validate_fe.py     validates the feature engineering against the training file
+  model/
+    kaizen_mrca_v1.joblib   frozen artifact (pipeline, isotonic calibration, threshold, metadata)
+    MODEL_CARD.md           model card in English (TRIPOD+AI); model_card.es.md in Spanish
+    training_report.json    version, date, git SHA, data hash, metrics
+  app/streamlit_app.py      user interface; imports only inference.predict()
+  data/README.md            data policy (no participant-level data are published)
+  data/sample_synthetic.csv eight fictitious rows for testing the inference
+  requirements.txt          pinned versions
+  CITATION.cff
 ```
 
-## Cómo reproducir
+## Reproducing
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-# (requiere el CSV anonimizado 09_FE_SAP_v2.2.csv; ver data/README.md)
-export KAIZEN_DATA=/ruta/a/02_datos
-python src/train.py          # congela model/kaizen_mrca_v1.joblib
-python src/parity_test.py    # GATE: AUC dev 0.802 / temporal 0.626 / umbral 0.216
+export KAIZEN_DATA=/path/to/data      # see data/README.md
+python src/train.py                    # freezes model/kaizen_mrca_v1.joblib
+python src/parity_test.py              # gate: AUC 0.802 (development), 0.626 (temporal validation), threshold 0.216
 ```
 
-## Resultados honestos
-- **Desarrollo 2023 (OOF):** AUC **0,80** · VPN **0,83** · umbral 0,216.
-- **Validación temporal 2024:** AUC **0,63** (cae por población más educada; calibración recuperable con recalibración local).
-- Mejor desempeño en **baja escolaridad** (perfil equitativo).
+## Results
 
-## Descargo
-Herramienta de **cribado de primer nivel**, **no diagnóstica**. Requiere **recalibración local**.
-No usar para autodiagnóstico ni para denegar atención.
+- Development, 2023 wave (n = 631), out-of-fold: AUC 0.80, negative predictive value 0.83, threshold 0.216.
+- Temporal validation, 2024 wave (n = 146): AUC 0.63. The drop reflects a more educated population; calibration is recoverable with local recalibration.
+- Discrimination was better among people with low educational attainment than among those with high educational attainment; the lower negative predictive value in the latter group is declared as an equity limitation.
 
-## Datos
-No se publican datos a nivel de participante. Disponibles **bajo solicitud razonable** al autor
-(fmarquez.mum@gmail.com) y aprobación del Comité de Ética UCCuyo (protocolo 003/20). Ver `data/README.md`.
+## Intended use and limits
 
-## Cita
-Ver `CITATION.cff`. Licencia del código: **MIT** (`LICENSE`).
+A first-level, self-report screening aid that requires local recalibration before use in any other population. It does not diagnose cognitive impairment or dementia, does not replace clinical assessment, and must not be used for self-diagnosis or to deny care.
+
+## Data
+
+No participant-level data are published. The repository contains code and the frozen model artifact, which holds only aggregated parameters (coefficients, scaling constants, the isotonic map and the threshold). Access to the de-identified dataset is governed by the Neuromentia program and its institutional procedures; requests can be sent to the author and are forwarded to the program. See `data/README.md`.
+
+## Citation
+
+See `CITATION.cff` and the Zenodo record (doi:10.5281/zenodo.20602277). Code under the MIT License.

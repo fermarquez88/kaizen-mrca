@@ -8,7 +8,7 @@ la ingeniería de variables ni el código respecto de v1.0.0 (paridad idéntica:
 temporal 0,626 / umbral 0,216, sklearn 1.6.1).
 
 ## [1.0.0] — 2026-06-08
-Primer congelado reproducible del modelo (acompaña al manuscrito CAN 2026).
+Primer congelado reproducible del modelo.
 
 ### Added
 - Artefacto único congelado `model/kaizen_mrca_v1.joblib`: pipeline ajustado
